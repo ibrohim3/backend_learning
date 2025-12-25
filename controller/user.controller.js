@@ -1,0 +1,218 @@
+const { User } = require('../model/userSchema')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+// Login User
+const postLogin = async (req, res) => {
+    try {
+        const { username, password } = req.body
+
+        const user = await User.findOne({ username })
+        console.log(user);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Username is invalid!"
+            })
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password)
+        if (!passwordMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Username or Password is invalid!"
+            })
+        }
+
+        const token = jwt.sign({ username: user.username }, "secret");
+        return res.json({
+            message: "Token",
+            token: token
+        })
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error: An error occured during the login process."
+        });
+    }
+};
+
+
+// Post Register
+const postRegister = async (req, res) => {
+    try {
+        const {
+            username,
+            password,
+            firstname,
+            lastname,
+            birthday,
+            jinsi,
+            address,
+            phone,
+        } = req.body;
+        const existingUser = await User.findOne({ username })
+
+        console.log(existingUser);
+
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Bu nom bilan ro'yxatdan o'tgan foydalanuvchi mavjud",
+            });
+        } else {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = new User({
+                username,
+                firstname,
+                lastname,
+                birthday,
+                jinsi,
+                address,
+                phone,
+                password: hashedPassword,
+            });
+            await newUser.save();
+            return res.status(201).json({
+                success: true,
+                message: "Ro'yxatdan o'tish muvaffaqiyatli yakunl-andi!",
+                data: {
+                    id: newUser._id,
+                    username: newUser.username
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Xato:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server xatosi: Ro'yxatdan o'tish jarayonida xato yuz berdi."
+        })
+
+    }
+}
+// getUsers
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({})
+        res.status(200).json({
+            success: true,
+            message: "Barcha foydalanuvchilar ro'yxati olingan.",
+            count: users.length,
+            innerData: users
+        });
+
+    } catch (error) {
+        console.error("Error fetching users: ", error);
+        res.status(500).json({
+            success: false,
+            message: "Server xatosi: Foydalanuvchilarni olishda xato yuzberdi"
+        })
+
+    }
+}
+// getUserById,
+const getUserById = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "user not found" });
+        }
+
+        res.json({ message: "User found", user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internet server error" });
+    }
+}
+// updateUser
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { username, lastname, phone, address, password } = req.body;
+
+        const updateData = { username, lastname, phone, address };
+
+        // Password mavjud bo‘lsa hash qilamiz
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateData.password = hashedPassword;
+        }
+
+        if (username) {
+            const existingUser = await User.findOne({ username });
+            if (existingUser && existingUser._id.toString() !== id) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Bu username allaqachon mavjud"
+                });
+            }
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User topilmadi"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "User muvaffaqiyatli yangilandi",
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Server xatosi",
+            error: error.message
+        });
+    }
+};
+// deleteUser
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "User deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+};
+
+module.exports = {
+    postRegister,
+    getUsers, getUserById,
+    updateUser,
+    deleteUser,
+    postLogin
+} 
