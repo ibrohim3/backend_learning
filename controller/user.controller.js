@@ -209,10 +209,42 @@ const deleteUser = async (req, res) => {
     }
 };
 
+const userSearch = async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query || typeof query !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid search query",
+            });
+        }
+        const result = await User.find({
+            $or: [
+                { firstname: { $regex: query, $options: "i" } },
+                { lastname: { $regex: query, $options: "i" } },
+                { username: { $regex: query, $options: "i" } },
+            ],
+        });
+        if (result.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No users found matching the query",
+            });
+        }
+        res.json(result);
+    } catch (error) {
+        console.log("Error fetching user", error);
+        res.status(500).json({
+            message: "Server error: Failed to fetch users",
+        });
+    }
+};
+
 module.exports = {
     postRegister,
     getUsers, getUserById,
     updateUser,
     deleteUser,
-    postLogin
+    postLogin,
+    userSearch
 } 

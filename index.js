@@ -19,10 +19,14 @@ async function connectToDb() {
 }
 connectToDb()
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5555
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 })
 
 const { user } = require("./routes/userRoute")
+const { car } = require("./routes/carRoute")
+const { edu } = require("./routes/eduRoute")
 app.use("/user", user)
+app.use("/car", car)
+app.use("/edu", edu)
