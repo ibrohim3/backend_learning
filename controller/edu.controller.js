@@ -16,7 +16,8 @@ const eduCreate = async (req, res) => {
             await newEdu.save()
             return res.status(201).json({
                 success: true,
-                message: "New edu succesfuly created."
+                message: "New edu succesfuly created.",
+                data: newEdu
             })
         }
     } catch (error) {
