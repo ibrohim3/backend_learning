@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken')
 const postLogin = async (req, res) => {
     try {
         const { username, password } = req.body
-
         const user = await User.findOne({ username })
         console.log(user);
         if (!user) {
@@ -15,7 +14,6 @@ const postLogin = async (req, res) => {
                 message: "Username is invalid!"
             })
         }
-
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (!passwordMatch) {
             return res.status(401).json({
@@ -23,7 +21,6 @@ const postLogin = async (req, res) => {
                 message: "Username or Password is invalid!"
             })
         }
-
         const token = jwt.sign({ username: user.username }, "secret");
         return res.json({
             message: "Token",
@@ -38,8 +35,6 @@ const postLogin = async (req, res) => {
         });
     }
 };
-
-
 // Post Register
 const postRegister = async (req, res) => {
     try {
@@ -85,7 +80,6 @@ const postRegister = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error("Xato:", error);
         return res.status(500).json({
             success: false,
             message: "Server xatosi: Ro'yxatdan o'tish jarayonida xato yuz berdi."
@@ -208,7 +202,6 @@ const deleteUser = async (req, res) => {
         });
     }
 };
-
 const userSearch = async (req, res) => {
     try {
         const { query } = req.query;
