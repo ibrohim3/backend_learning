@@ -128,4 +128,15 @@ const eduDelete = async (req, res) => {
         })
     }
 }
-module.exports = { eduCreate, eduGetAll, eduGet, update, eduDelete }
+
+// Search
+const eduSearch = async (req, res) => {
+    try {
+        const { q } = req.query
+        if (!q || typeof q !== "string") { return res.status(400).json({ success: false, message: "Invalid search query" }) }
+        const results = await Edu.find({ $or: [{ center_name: { $regex: q, $options: "i" } }] })
+        if (!results || results.length === 0) { return res.status(404).json({ success: false, message: "No users found matching the query" }) }
+        return res.status(200).json({ success: true, message: "Found", count: results.length, data: results })
+    } catch (error) { return res.status(500).json({ success: false, message: "Server error", error: error.message }) }
+}
+module.exports = { eduCreate, eduGetAll, eduGet, update, eduDelete, eduSearch }

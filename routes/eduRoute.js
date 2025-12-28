@@ -1,9 +1,10 @@
 const { Router } = require("express")
 const edu = Router()
-const { eduCreate, eduGetAll, eduGet, update, eduDelete } = require("../controller/edu.controller")
+const { eduCreate, eduGetAll, eduGet, update, eduDelete, eduSearch } = require("../controller/edu.controller")
 
 edu.post("/", eduCreate)
 edu.get("/", eduGetAll)
+edu.get("/search", eduSearch)
 edu.get("/:id", eduGet)
 edu.patch("/:id", update)
 edu.delete("/:id", eduDelete)
