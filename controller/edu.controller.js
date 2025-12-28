@@ -103,4 +103,29 @@ const update = async (req, res) => {
         })
     }
 }
-module.exports = { eduCreate, eduGetAll, eduGet, update }
+
+// delete
+const eduDelete = async (req, res) => {
+    try {
+        const { id } = req.params
+        const deleted = await Edu.findByIdAndDelete(id)
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: "Edu is not found"
+            })
+        }
+        return res.status(200).json({
+            success: false,
+            message: "Deleted",
+            deleted: deleted
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        })
+    }
+}
+module.exports = { eduCreate, eduGetAll, eduGet, update, eduDelete }
