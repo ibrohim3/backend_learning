@@ -27,6 +27,8 @@ app.listen(PORT, () => {
 const { user } = require("./routes/userRoute")
 const { car } = require("./routes/carRoute")
 const { edu } = require("./routes/eduRoute")
+const { house } = require("./routes/houseRoute")
 app.use("/user", user)
 app.use("/car", car)
 app.use("/edu", edu)
+app.use("/house", house)
