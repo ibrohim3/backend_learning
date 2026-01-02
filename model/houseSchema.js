@@ -11,12 +11,3 @@ const houseSchema = new Schema({
 
 const House = model("house", houseSchema)
 module.exports = { House }
-
-// {
-//     "region": "Uzbekistan",
-//     "city": "Namangan",
-//     "house_number": 14,
-//     "street": "Bug'doyzor",
-//     "family_members": 6,
-//     "location": "G'uncha"
-// }
