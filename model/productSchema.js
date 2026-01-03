@@ -1,4 +1,3 @@
-const { required } = require("joi")
 const { Schema, model } = require("mongoose")
 
 const productSchema = new Schema({
@@ -9,5 +8,5 @@ const productSchema = new Schema({
     count: { type: Number, default: 0 }
 })
 
-const Product = module("Product", productSchema)
+const Product = model("Product", productSchema)
 module.exports = { Product }
