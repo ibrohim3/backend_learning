@@ -31,4 +31,28 @@ const productCreate = async (req, res) => {
     }
 }
 
-module.exports = { productCreate }
+const getProducts = async (req, res) => {
+    try {
+        const products = await Product.find({})
+        if (!products) {
+            return res.status(404).json({ success: false, message: "Product not found" })
+        }
+        return res.status(200).json({ success: true, count: products.length, data: products })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error: ", error: error.message })
+    }
+}
+
+const getProduct = async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await Product.findById(id)
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" })
+        }
+        return res.status(200).json({ success: true, data: product })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "server error: ", error: error.message })
+    }
+}
+module.exports = { productCreate, getProducts, getProduct }
