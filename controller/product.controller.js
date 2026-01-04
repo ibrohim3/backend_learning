@@ -55,4 +55,33 @@ const getProduct = async (req, res) => {
         return res.status(500).json({ success: false, message: "server error: ", error: error.message })
     }
 }
-module.exports = { productCreate, getProducts, getProduct }
+
+const updateProduct = async (req, res) => {
+    try {
+
+        const { id } = req.params
+        const { name, price, description, image, count } = req.body
+        const updateData = { name, price, description, image, count }
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true })
+        if (!updatedProduct) {
+            return res.status(404).json({ success: false, message: "not found" })
+        }
+        return res.status(200).json({ success: true, data: updatedProduct })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error: ", error: error.message })
+    }
+}
+
+const deleteProduct = async (req, res) => {
+    try {
+        const productID = req.params.id
+        const removed = await Product.findByIdAndDelete(productID)
+        if (!removed) {
+            return res.status(404).json({ success: false, message: "not found" })
+        }
+        return res.status(200).json({ success: true, data: { id: removed._id, name: removed.name } })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error", error: error.message })
+    }
+}
+module.exports = { productCreate, getProducts, getProduct, updateProduct, deleteProduct }
