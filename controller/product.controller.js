@@ -84,4 +84,22 @@ const deleteProduct = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error", error: error.message })
     }
 }
-module.exports = { productCreate, getProducts, getProduct, updateProduct, deleteProduct }
+
+const searchProduct = async (req, res) => {
+    try {
+        const { q } = req.query
+        if (!q || typeof q !== 'string') {
+            return res.status(400).json({ success: false, message: "Invalide search query" })
+        }
+        const results = await Product.find({
+            $or: [{ name: { $regex: q, $options: "i" } }, { description: { $regex: q, $options: 'i' } }]
+        })
+        if (!results || results.length === 0) {
+            return res.status(404).json({ success: false, message: "Not found" })
+        }
+        return res.status(200).json({ success: true, count: results.length, data: results })
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error: ", error: error.message })
+    }
+}
+module.exports = { productCreate, getProducts, getProduct, updateProduct, deleteProduct, searchProduct }
