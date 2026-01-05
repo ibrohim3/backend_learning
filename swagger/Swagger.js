@@ -13,7 +13,7 @@ const swaggerOptions = {
             url: 'http://localhost:5555'
         },]
     },
-    apis: ['../routes/*.js']
+    apis: ['./routes/*.js']
 }
 
 const swaggerSpec = swaggerJsDoc(swaggerOptions)
