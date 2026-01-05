@@ -1,6 +1,7 @@
 const { User } = require('../model/userSchema')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const mongoose = require("mongoose")
 
 // Login User
 const postLogin = async (req, res) => {
@@ -110,19 +111,21 @@ const getUsers = async (req, res) => {
 // getUserById,
 const getUserById = async (req, res) => {
     try {
-        const userId = req.params.id;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "user not found" });
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid user ID" });
         }
-
-        res.json({ message: "User found", user });
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User found", user });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internet server error" });
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-}
+};
+
 // updateUser
 const updateUser = async (req, res) => {
     try {
@@ -175,6 +178,7 @@ const updateUser = async (req, res) => {
         });
     }
 };
+
 // deleteUser
 const deleteUser = async (req, res) => {
     try {
@@ -202,6 +206,7 @@ const deleteUser = async (req, res) => {
         });
     }
 };
+
 const userSearch = async (req, res) => {
     try {
         const { query } = req.query;
@@ -229,6 +234,7 @@ const userSearch = async (req, res) => {
         console.log("Error fetching user", error);
         res.status(500).json({
             message: "Server error: Failed to fetch users",
+            error: error.message
         });
     }
 };

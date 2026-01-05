@@ -102,7 +102,7 @@ const searchProduct = async (req, res) => {
         if (!results || results.length === 0) {
             return res.status(404).json({ success: false, message: "Not found" })
         }
-        return res.status(200).json({ success: true, count: results.length, data: results })
+        return res.status(200).json({ success: true, message: "Found", count: results.length, data: results })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Server error: ", error: error.message })
     }
