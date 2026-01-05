@@ -2,7 +2,7 @@ const express = require('express');
 const { connect } = require("mongoose")
 const cors = require("cors")
 require("dotenv").config()
-
+const { swaggerUi, swaggerSpec } = require("./swagger/Swagger")
 const app = express()
 
 app.use(express.json())
@@ -34,3 +34,6 @@ app.use("/car", car)
 app.use("/edu", edu)
 app.use("/house", house)
 app.use("/products", product)
+
+// swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))

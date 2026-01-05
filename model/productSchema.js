@@ -8,5 +8,5 @@ const productSchema = new Schema({
     count: { type: Number, default: 0 }
 })
 
-const Product = model("Product", productSchema)
+const Product = model("product", productSchema)
 module.exports = { Product }

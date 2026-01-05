@@ -1,5 +1,5 @@
 const validate = (schema, property = "body") => {
-    return (req, res, nex) => {
+    return (req, res, next) => {
         const { error, value } = schema.validate(req[property], {
             abortEarly: false
         })
@@ -11,7 +11,7 @@ const validate = (schema, property = "body") => {
             })
         }
         req[property] = value
-        nex()
+        next()
     }
 }
 module.exports = { validate }

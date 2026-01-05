@@ -4,7 +4,6 @@ const productCreate = async (req, res) => {
     try {
         const { name, price, description, image, count } = req.body
         const existingProduct = await Product.findOne({ name })
-        console.log(existingProduct);
         if (existingProduct) {
             return res.status(400).json({
                 success: false,
@@ -34,7 +33,7 @@ const productCreate = async (req, res) => {
 const getProducts = async (req, res) => {
     try {
         const products = await Product.find({})
-        if (!products) {
+        if (products.length === 0) {
             return res.status(404).json({ success: false, message: "Product not found" })
         }
         return res.status(200).json({ success: true, count: products.length, data: products })
@@ -62,6 +61,12 @@ const updateProduct = async (req, res) => {
         const { id } = req.params
         const { name, price, description, image, count } = req.body
         const updateData = { name, price, description, image, count }
+        if (name) {
+            const exists = await Product.findOne({ name, _id: { $ne: id } })
+            if (exists) {
+                return res.status(400).json({ message: "Name already exists" })
+            }
+        }
         const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true })
         if (!updatedProduct) {
             return res.status(404).json({ success: false, message: "not found" })

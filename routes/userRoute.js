@@ -14,3 +14,7 @@ user.patch("/:id", validate(userUpdateValidation), updateUser)
 user.delete("/:id", deleteUser)
 
 module.exports = { user }
+
+/** swagger
+ * 
+ */

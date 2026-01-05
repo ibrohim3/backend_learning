@@ -1,11 +1,12 @@
 const Router = require("express")
 const product = Router()
 const { productCreate, getProducts, getProduct, updateProduct, deleteProduct, searchProduct } = require("../controller/product.controller")
-
-product.post("/", productCreate)
+const { productCreateValidation, productUpdateValidation } = require("../validation/product.validation")
+const { validate } = require("../middleware/validate")
+product.post("/", validate(productCreateValidation, 'body'), productCreate)
 product.get("/", getProducts)
 product.get("/search", searchProduct)
 product.get("/:id", getProduct)
-product.patch("/:id", updateProduct)
+product.patch("/:id", validate(productUpdateValidation, 'body'), updateProduct)
 product.delete("/:id", deleteProduct)
 module.exports = { product }
