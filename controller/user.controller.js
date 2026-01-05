@@ -133,13 +133,10 @@ const updateUser = async (req, res) => {
         const { username, lastname, phone, address, password } = req.body;
 
         const updateData = { username, lastname, phone, address };
-
-        // Password mavjud bo‘lsa hash qilamiz
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
             updateData.password = hashedPassword;
         }
-
         if (username) {
             const existingUser = await User.findOne({ username });
             if (existingUser && existingUser._id.toString() !== id) {
@@ -149,26 +146,22 @@ const updateUser = async (req, res) => {
                 });
             }
         }
-
         const updatedUser = await User.findByIdAndUpdate(
             id,
             updateData,
             { new: true, runValidators: true }
         );
-
         if (!updatedUser) {
             return res.status(404).json({
                 success: false,
                 message: "User topilmadi"
             });
         }
-
         return res.status(200).json({
             success: true,
             message: "User muvaffaqiyatli yangilandi",
             user: updatedUser
         });
-
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -229,7 +222,7 @@ const userSearch = async (req, res) => {
                 message: "No users found matching the query",
             });
         }
-        res.json(result);
+        res.json({ success: true, message: "Found", count: result.length, data: result });
     } catch (error) {
         console.log("Error fetching user", error);
         res.status(500).json({

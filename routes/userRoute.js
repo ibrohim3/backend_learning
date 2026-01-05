@@ -126,7 +126,7 @@ user.get('/', getUsers)
 
 /**
  * @swagger
- * /user/userSearch:
+ * /user/search:
  *   get:
  *     summary: Foydalanuvchi qidirish
  *     tags:
@@ -148,7 +148,7 @@ user.get('/', getUsers)
  *       500:
  *         description: Server xatosi
  */
-user.get('/user/userSearch', userSearch)
+user.get('/search', userSearch)
 
 /**
  * @swagger
@@ -176,9 +176,74 @@ user.get('/user/userSearch', userSearch)
  */
 user.get('/:id', getUserById)
 
+/**
+ * @swagger
+ * /user/{id}:
+ *   patch:
+ *     summary: Foydalanuvchi ma'lumotlarini yangilash
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Yangilanadigan foydalanuvchi ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Yangilanishi mumkin bo'lgan username
+ *               lastname:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 description: Agar o'zgartirilsa, password hash qilinadi
+ *     responses:
+ *       200:
+ *         description: Foydalanuvchi muvaffaqiyatli yangilandi
+ *       400:
+ *         description: Username allaqachon mavjud yoki noto‘g‘ri ID
+ *       404:
+ *         description: Foydalanuvchi topilmadi
+ *       500:
+ *         description: Server xatosi
+ */
+user.patch('/:id', validate(userUpdateValidation), updateUser);
 
+/**
+ * @swagger
+ * /user/{id}:
+ *   delete:
+ *     summary: Foydalanuvchini o‘chirish
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: O‘chiriladigan foydalanuvchi ID
+ *     responses:
+ *       200:
+ *         description: Foydalanuvchi muvaffaqiyatli o‘chirildi
+ *       404:
+ *         description: Foydalanuvchi topilmadi
+ *       500:
+ *         description: Server xatosi
+ */
+user.delete('/:id', deleteUser);
 
-user.patch('/:id', validate(userUpdateValidation), updateUser)
-user.delete('/:id', deleteUser)
 
 module.exports = { user }
