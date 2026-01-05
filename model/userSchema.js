@@ -10,7 +10,7 @@ const userSchema = new Schema({
     jinsi: { type: String, enum: ['male', 'famale'] },
     address: { type: String, default: '' },
     phone: { type: String, default: '' },
-    // product_id: { type: Schema.Types.ObjectId, ref: Product }
+    product_id: { type: Schema.Types.ObjectId, ref: Product }
 })
 
 const User = model("user", userSchema)

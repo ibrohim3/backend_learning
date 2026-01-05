@@ -98,7 +98,6 @@ const getUsers = async (req, res) => {
             count: users.length,
             innerData: users
         });
-
     } catch (error) {
         console.error("Error fetching users: ", error);
         res.status(500).json({
@@ -115,7 +114,7 @@ const getUserById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ success: false, message: "Invalid user ID" });
         }
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("product_id");;
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }

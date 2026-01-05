@@ -1,6 +1,5 @@
 const { Router } = require('express')
 const user = Router()
-
 const {
     postLogin,
     postRegister,
@@ -15,14 +14,12 @@ const {
     userUpdateValidation
 } = require('../validation/user.validation')
 const { validate } = require('../middleware/validate')
-
 /**
  * @swagger
  * tags:
  *   - name: Users
  *     description: User management
  */
-
 /**
  * @swagger
  * /user:
@@ -66,6 +63,9 @@ const { validate } = require('../middleware/validate')
  *               phone:
  *                 type: string
  *                 description: Foydalanuvchi telefon raqami
+ *               product_id:
+ *                 type: string
+ *                 description: Product ID
  *     responses:
  *       201:
  *         description: Foydalanuvchi muvaffaqiyatli ro'yxatdan o'tdi
@@ -75,7 +75,6 @@ const { validate } = require('../middleware/validate')
  *         description: Server xatosi
  */
 user.post('/', validate(userRegisterValidation, 'body'), postRegister)
-
 /**
  * @swagger
  * /user/login:
@@ -108,7 +107,6 @@ user.post('/', validate(userRegisterValidation, 'body'), postRegister)
  *         description: Server xatosi
  */
 user.post('/login', postLogin)
-
 /**
  * @swagger
  * /user:
@@ -123,7 +121,6 @@ user.post('/login', postLogin)
  *          description: Server xatosi
  */
 user.get('/', getUsers)
-
 /**
  * @swagger
  * /user/search:
@@ -149,7 +146,6 @@ user.get('/', getUsers)
  *         description: Server xatosi
  */
 user.get('/search', userSearch)
-
 /**
  * @swagger
  * /user/{id}:
@@ -175,7 +171,6 @@ user.get('/search', userSearch)
  *         description: Server xatosi
  */
 user.get('/:id', getUserById)
-
 /**
  * @swagger
  * /user/{id}:
@@ -220,7 +215,6 @@ user.get('/:id', getUserById)
  *         description: Server xatosi
  */
 user.patch('/:id', validate(userUpdateValidation), updateUser);
-
 /**
  * @swagger
  * /user/{id}:
@@ -244,6 +238,4 @@ user.patch('/:id', validate(userUpdateValidation), updateUser);
  *         description: Server xatosi
  */
 user.delete('/:id', deleteUser);
-
-
 module.exports = { user }

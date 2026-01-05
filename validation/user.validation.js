@@ -9,6 +9,7 @@ const userRegisterValidation = Joi.object({
     gender: Joi.string().optional(),
     address: Joi.string(),
     phone: Joi.string().pattern(/^\+998\d{9}$/),
+    product_id: Joi.required()
 })
 
 const userUpdateValidation = Joi.object({
@@ -20,5 +21,6 @@ const userUpdateValidation = Joi.object({
     gender: Joi.string().optional(),
     address: Joi.string(),
     phone: Joi.string().pattern(/^\+998\d{9}$/),
+    product_id: Joi.optional()
 })
 module.exports = { userRegisterValidation, userUpdateValidation }
