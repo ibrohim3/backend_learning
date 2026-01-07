@@ -36,6 +36,7 @@ const postLogin = async (req, res) => {
         });
     }
 };
+
 // Post Register
 const postRegister = async (req, res) => {
     try {
@@ -88,6 +89,7 @@ const postRegister = async (req, res) => {
 
     }
 }
+
 // getUsers
 const getUsers = async (req, res) => {
     try {
@@ -107,6 +109,7 @@ const getUsers = async (req, res) => {
 
     }
 }
+
 // getUserById,
 const getUserById = async (req, res) => {
     try {

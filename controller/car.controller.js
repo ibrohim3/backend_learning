@@ -45,7 +45,8 @@ const carAdd = async (req, res) => {
         console.log("xato: ", error);
         return res.status(500).json({
             success: false,
-            message: "Server xatosi"
+            message: "Server xatosi",
+            error: error.message
         })
 
     }
@@ -189,50 +190,36 @@ const deleteCar = async (req, res) => {
 // Search Car
 const searchCar = async (req, res) => {
     try {
-        const { query } = req.params;
-
-        if (!query || query.trim() === "") {
+        const { query } = req.query;
+        if (!query || typeof query !== 'string') {
             return res.status(400).json({
                 success: false,
                 message: "Qidiruv maydoni to'ldirilmadi"
             });
         }
-
         const results = await Car.find({
             $or: [
                 { model: { $regex: query, $options: "i" } },
                 { title: { $regex: query, $options: "i" } },
-                { description: { $regex: query, $options: "i" } },
-                { color: { $regex: query, $options: "i" } },
-                { carType: { $regex: query, $options: "i" } },
-                { charging: { $regex: query, $options: "i" } },
-                { weight: { $regex: query, $options: "i" } },
-                { gasoline: { $regex: query, $options: "i" } },
-                { yearMachine: { $regex: query, $options: "i" } },
-                { price: { $regex: query, $options: "i" } },
             ]
         });
-
         if (results.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: "Moshina topilmadi"
             });
         }
-
         return res.status(200).json({
             success: true,
             message: "Qidiruv natijalari",
             count: results.length,
             data: results
         });
-
     } catch (error) {
         console.error("xatolik: ", error);
         return res.status(500).json({
             success: false,
             message: "Server xatosi: ", error,
-            // error: error.message
         });
     }
 };
