@@ -67,8 +67,31 @@ product.post("/", validate(productCreateValidation, 'body'), productCreate)
  */
 product.get("/", getProducts)
 
-product.get("/search", searchProduct)
+/**
+ * @swagger
+ * /products/{id}:
+ *   get: 
+ *     summary: Id bilan olish
+ *     tags: 
+ *       - Product
+ *     parameters: 
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: maxsulot id
+ *     responses:
+ *       200:
+ *         description: maxsulot topildi
+ *       404:
+ *         description: maxsulot topilmadi
+ *       500:
+ *         description: server xatosi
+ */
 product.get("/:id", getProduct)
+
+product.get("/search", searchProduct)
 product.patch("/:id", validate(productUpdateValidation, 'body'), updateProduct)
 product.delete("/:id", deleteProduct)
 module.exports = { product }
