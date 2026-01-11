@@ -7,8 +7,8 @@ const { validate } = require("../middleware/validate")
 /**
  * @swagger
  *   tags:
- *    - name: Product
- *      description: Maxsulotlar
+ *    - name: Product 
+ *      description: Products management 
  */
 /**
  * @swagger
@@ -157,6 +157,28 @@ product.get("/:id", getProduct)
  *         description: Server xatosi
  */
 product.patch("/:id", validate(productUpdateValidation, 'body'), updateProduct)
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Maxsulot o'chirish
+ *     tags:
+ *       - Product
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:  
+ *           type: string
+ *         description: O'chilishi kerak bo'lgan maxsolut ID si
+ *     responses:
+ *       200: 
+ *         description: Maxsulot o'chirildi!
+ *       404:
+ *         description: Maxsulot topilmadi.
+ *       500:
+ *         description: Server xatosi
+ */
 product.delete("/:id", deleteProduct)
 module.exports = { product }
-setInterval

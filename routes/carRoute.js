@@ -14,12 +14,13 @@ const { validate } = require("../middleware/validate")
  * @swagger
  * tags:
  *  - name: Car
- *    description: Car
+ *    description: Cars management
  */
 /**
  * @swagger
  * /car:
  *  post:
+ *    summary: Moshina qo'shish
  *    tags:
  *      - Car
  *    description: Moshina qo'shish
@@ -45,11 +46,11 @@ const { validate } = require("../middleware/validate")
  *                type: number
  *              carType:
  *                type: string
- *              charging:
+ *              charging: 
  *                type: string
  *              weight:
  *                type: string
- *              gasoline:
+ *              gasoline: 
  *                type: string
  *              yearMachine:
  *                type: string
@@ -132,7 +133,84 @@ car.get("/search", searchCar)
  */
 car.get("/:id", carGetById)
 
-car.patch("/:id", validate(carUpdateValidation, "body"), updateCar)
+/**
+ * @swagger
+ * /car/{id}:
+ *   patch:
+ *     summary: Moshina ma'lumotini yangilash
+ *     tags:
+ *       - Car
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Yangilanadigan moshina ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - model
+ *               - carType
+ *             properties:
+ *               title:
+ *                 type: string
+ *               model:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               color:
+ *                 type: string
+ *               horsePower:
+ *                 type: number
+ *               carType:
+ *                 type: string
+ *               charging:
+ *                 type: string
+ *               weight:
+ *                 type: string
+ *               gasoline:
+ *                 type: string
+ *               yearMachine:
+ *                 type: string
+ *               price:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Moshina muvaffaqiyatli yangilandi
+ *       404:
+ *         description: Moshina topilmadi
+ *       500:
+ *         description: Server xatosi
+ */
+car.patch("/:id", validate(carUpdateValidation, "body"), updateCar);
+
+/**
+ * @swagger
+ * /car/{id}:
+ *   delete:
+ *     summary: Moshina malumotlarini o'chirish 
+ *     tags:
+ *       - Car
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: O'chiriladigan moshini ID si
+ *     responses:
+ *       200:
+ *         description: Moshina malumoti o;chirildi.
+ *       404: 
+ *         description: Moshina malumoti topilmadi
+ *       500:
+ *         descripyion: Server xatosi
+ */
 car.delete("/:id", deleteCar)
 
 module.exports = { car }
