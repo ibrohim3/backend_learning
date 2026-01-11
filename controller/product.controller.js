@@ -59,8 +59,8 @@ const updateProduct = async (req, res) => {
     try {
 
         const { id } = req.params
-        const { name, price, description, image, count } = req.body
-        const updateData = { name, price, description, image, count }
+        const { name, price, description, image } = req.body
+        const updateData = { name, price, description, image }
         if (name) {
             const exists = await Product.findOne({ name, _id: { $ne: id } })
             if (exists) {
@@ -92,12 +92,12 @@ const deleteProduct = async (req, res) => {
 
 const searchProduct = async (req, res) => {
     try {
-        const { q } = req.query
-        if (!q || typeof q !== 'string') {
+        const { query } = req.query
+        if (!query || typeof query !== 'string') {
             return res.status(400).json({ success: false, message: "Invalide search query" })
         }
         const results = await Product.find({
-            $or: [{ name: { $regex: q, $options: "i" } }, { description: { $regex: q, $options: 'i' } }]
+            $or: [{ name: { $regex: query, $options: "i" } }, { description: { $regex: query, $options: 'i' } }]
         })
         if (!results || results.length === 0) {
             return res.status(404).json({ success: false, message: "Not found" })

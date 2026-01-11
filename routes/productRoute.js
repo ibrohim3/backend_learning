@@ -64,8 +64,34 @@ product.post("/", validate(productCreateValidation, 'body'), productCreate)
  *         description: Maxsulot topilmadi
  *       500: 
  *         description: Server xatosi
- */
+*/
 product.get("/", getProducts)
+
+/**
+ * @swagger
+ * /products/search:
+ *   get:
+ *     summary: Maxsulot qidirish
+ *     tags:
+ *       - Product
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: maxsulot nomi
+ *     responses:
+ *       200: 
+ *         description: Qidirilnmagan maxsulot topildi!
+ *       400: 
+ *         description: Qidiruv so'rovi xato
+ *       404: 
+ *         description: Qidiruv bo'yicha maxsulot topilmadi
+ *       500:
+ *         description: Server xatosi
+ */
+product.get("/search", searchProduct)
 
 /**
  * @swagger
@@ -91,7 +117,46 @@ product.get("/", getProducts)
  */
 product.get("/:id", getProduct)
 
-product.get("/search", searchProduct)
+/**
+ * @swagger
+ * /products/{id}:
+ *   patch:
+ *     summary: Mxsulotni yangilash
+ *     tags:
+ *       - Product
+ *     parameters: 
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Yangilanadigan maxsulot ID si
+ *     requestBody:
+ *       required: true
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price: 
+ *                 type: number
+ *               deacription:
+ *                 type: string
+ *               image: 
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Maxsulot yangilandi!
+ *       400:
+ *         description: Noto'g'ri ID yoki bunday nom allaqachon mavjud
+ *       404:
+ *         description: Maxsulot topilmadi
+ *       500: 
+ *         description: Server xatosi
+ */
 product.patch("/:id", validate(productUpdateValidation, 'body'), updateProduct)
 product.delete("/:id", deleteProduct)
 module.exports = { product }
+setInterval

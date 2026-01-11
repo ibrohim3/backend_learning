@@ -131,6 +131,7 @@ car.get("/search", searchCar)
  *        description: Server xatosi
  */
 car.get("/:id", carGetById)
+
 car.patch("/:id", validate(carUpdateValidation, "body"), updateCar)
 car.delete("/:id", deleteCar)
 
