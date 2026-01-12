@@ -75,12 +75,12 @@ const deleteHouse = async (req, res) => {
 
 const searchHouse = async (req, res) => {
     try {
-        const { q } = req.query
-        if (!q || typeof q !== "string") {
+        const { query } = req.query
+        if (!query || typeof query !== "string") {
             return res.status(400).json({ success: false, message: "Invalid search query" })
         }
         const results = await House.find({
-            $or: [{ region: { $regex: q, $options: "i" } }, { street: { $regex: q, $options: "i" } }]
+            $or: [{ region: { $regex: query, $options: "i" } }, { street: { $regex: query, $options: "i" } }]
         })
         if (!results || results.length === 0) {
             return res.status(404).json({ success: false, message: "No house found by search" })
