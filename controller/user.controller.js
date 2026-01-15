@@ -93,7 +93,7 @@ const postRegister = async (req, res) => {
 // getUsers
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find({})
+        const users = await User.find({}).populate('product')
         res.status(200).json({
             success: true,
             message: "Barcha foydalanuvchilar ro'yxati olingan.",
@@ -117,7 +117,7 @@ const getUserById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ success: false, message: "Invalid user ID" });
         }
-        const user = await User.findById(id).populate("product_id");;
+        const user = await User.findById(id).populate("product");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }

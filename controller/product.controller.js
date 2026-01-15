@@ -10,7 +10,7 @@ const productCreate = async (req, res) => {
                 message: "Bu nom bilan maxsulot mavjud."
             })
         } else {
-            const newProduct = new Product({ name, price, description, image, count })
+            const newProduct = new Product({ name, price, description, image, count, user: req.user.id })
             await newProduct.save()
             return res.status(201).json({
                 success: true,
@@ -32,7 +32,7 @@ const productCreate = async (req, res) => {
 
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.find({})
+        const products = await Product.find({}).populate('user')
         if (products.length === 0) {
             return res.status(404).json({ success: false, message: "Product not found" })
         }
@@ -45,7 +45,7 @@ const getProducts = async (req, res) => {
 const getProduct = async (req, res) => {
     try {
         const { id } = req.params
-        const product = await Product.findById(id)
+        const product = await Product.findById(id).populate('user')
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found" })
         }

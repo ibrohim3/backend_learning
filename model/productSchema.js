@@ -5,8 +5,9 @@ const productSchema = new Schema({
     price: { type: Number, required: true },
     description: { type: String, required: true, trim: true },
     image: { type: String, required: true },
-    count: { type: Number, default: 0 }
+    count: { type: Number, default: 0 },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 })
 
-const Product = model("product", productSchema)
+const Product = model("Product", productSchema)
 module.exports = { Product }
